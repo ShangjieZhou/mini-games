@@ -1,21 +1,11 @@
 import logo from "./logo.svg";
-import "./App.css";
+import "./App.scss";
+import { DiscoBattle } from "./pages/discoBattle/DiscoBattle";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello I'm Guoguo</p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <DiscoBattle />
     </div>
   );
 }
