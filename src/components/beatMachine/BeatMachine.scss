@@ -1,0 +1,141 @@
+.beat-machine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+
+  --mask: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 1) 0,
+      rgba(0, 0, 0, 1) 80%,
+      rgba(0, 0, 0, 0) 100%,
+      rgba(0, 0, 0, 0) 0
+    )
+    100% 50% / 100% 100% repeat-x;
+
+
+  border: 1px solid transparent;
+  -webkit-mask: var(--mask);
+  mask: var(--mask);
+
+  .comment {
+    font-size: 1.6rem;
+    position: absolute;
+    bottom: calc(20% - 0.8rem);
+    animation: comment 0.4s linear forwards;
+  }
+
+  .game-box {
+    width: 100%;
+    position: relative;
+  }
+
+  .beat-node {
+    animation: emerge 0.2s linear forwards;
+  }
+
+  .beat-shrink {
+    animation: shrink 0.3s ease forwards;
+  }
+
+  .drum-hit {
+    animation: expand 0.2s ease;
+  }
+
+  .drum-hit-alt {
+    animation: expand-alt 0.2s ease;
+  }
+
+  .drum-missed {
+    animation: shake 0.3s linear;
+  }
+
+  .drum-missed-alt {
+    animation: shake-alt 0.3s linear;
+  }
+
+  @keyframes comment {
+    0% {
+      transform: scale(0);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(2);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0;
+    }
+  }
+
+  @keyframes shrink {
+    to {
+      r: 0;
+    }
+  }
+
+  @keyframes emerge {
+    from {
+      r: 0;
+    }
+  }
+
+  @keyframes expand {
+    50% {
+      r: 25;
+    }
+    100% {
+      r: 20;
+    }
+  }
+
+  @keyframes expand-alt {
+    50% {
+      r: 25;
+    }
+    100% {
+      r: 20;
+    }
+  }
+
+  @keyframes shake {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+      transform: translate(-2px, 0);
+    }
+    20%,
+    40%,
+    60%,
+    80% {
+      transform: translate(2px, 0);
+    }
+  }
+
+  @keyframes shake-alt {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+      transform: translate(-2px, 0);
+    }
+    20%,
+    40%,
+    60%,
+    80% {
+      transform: translate(2px, 0);
+    }
+  }
+}

@@ -1,0 +1,85 @@
+#disco-battle-page {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  #disco-battle-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+    animation: twinkle 5s linear infinite;
+  }
+
+  #disco-cd {
+    width: 4rem;
+    animation: spin 2s infinite linear;
+  }
+
+  .machine-box {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes twinkle {
+    0% {
+      background-color: #ff5956;
+    }
+    20% {
+      background-color: #ff7eff;
+    }
+    40% {
+      background-color: #8f0083;
+    }
+    60% {
+      background-color: #65d1ff;
+    }
+    80% {
+      background-color: #8ce2b7;
+    }
+    100% {
+      background-color: #ff5956;
+    }
+  }
+}
+
+.modal-box.disco-battle {
+  border: solid 0.5rem black;
+  padding: 2rem 1rem;
+  border-radius: 1rem;
+  width: 20rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  row-gap: 1rem;
+
+  .option-box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .option-title {
+    font-weight: 400;
+  }
+}
