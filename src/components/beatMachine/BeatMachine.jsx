@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./BeatMachine.scss";
 import { v4 as uuid } from "uuid";
 
@@ -18,10 +18,11 @@ const missedMap = {
   "drum-hit-alt": "drum-missed",
 };
 
+const travelTime = 1000;
 const fullHeight = 240;
 const drumLine = 180;
-const startPos = 34;
-const unitsPerMilliSec = (drumLine - startPos) / 500;
+const startPos = 30;
+const unitsPerMilliSec = (drumLine - startPos) / travelTime;
 
 const SCORE = {
   NONE: 0,
@@ -48,12 +49,12 @@ export function BeatMachine(props) {
   const [drumState, setDrumState] = useState("");
   const [currScore, setCurrScore] = useState(SCORE.NONE);
   const [comments, setComments] = useState([]);
+  const [beatsInterval, setBeatsInterval] = useState(60000 / props.speed);
   const animateTimer = useRef(null);
 
   useEffect(() => {
     document.addEventListener("keydown", checkBeat);
-
-    setInterval(() => fastBeats(3), 60000 / props.speed);
+    setInterval(produceBeat, beatsInterval);
     window.requestAnimationFrame(moveBeats);
 
     return () => {
@@ -62,12 +63,28 @@ export function BeatMachine(props) {
     };
   }, []);
 
-  const fastBeats = (count) => {
-    addBeats();
-    count--;
-    if (count > 0) {
-      setTimeout(() => fastBeats(count), 120);
+  const produceBeat = () => {
+    const res = Math.random();
+    if (res > 0.9) {
+      multiBeats(2);
+    } else if (res > 0.3) {
+      singleBeat();
     }
+  };
+
+  const multiBeats = (beatNum) => {
+    const addBeat = (n) => {
+      // current beat
+      if (n > 0) {
+        singleBeat();
+      }
+
+      // next beat
+      if (n > 1) {
+        setTimeout(() => addBeat(n - 1), beatsInterval / beatNum);
+      }
+    };
+    addBeat(beatNum);
   };
 
   // count missed beats
@@ -77,17 +94,17 @@ export function BeatMachine(props) {
 
   // count "good" and "perfect" hits
   useEffect(() => {
-    if (drumState == "drum-hit" || drumState == "drum-hit-alt") {
-      if (currScore == SCORE.GOOD) {
+    if (drumState === "drum-hit" || drumState === "drum-hit-alt") {
+      if (currScore === SCORE.GOOD) {
         props.onGood();
-      } else if (currScore == SCORE.PERFECT) {
+      } else if (currScore === SCORE.PERFECT) {
         props.onPerfect();
       }
     }
   }, [drumState]);
 
   const removeBeat = (id) => {
-    setBeats((oldBeats) => oldBeats.filter((b) => b.id != id));
+    setBeats((oldBeats) => oldBeats.filter((b) => b.id !== id));
   };
 
   const animateDrum = (missed) => {
@@ -95,7 +112,7 @@ export function BeatMachine(props) {
       let newState = prev;
       if (!missed) {
         newState = hitMap[prev];
-      } else if (prev != "drum-hit" && prev != "drum-hit-alt") {
+      } else if (prev !== "drum-hit" && prev !== "drum-hit-alt") {
         newState = missedMap[prev];
       }
       return newState;
@@ -106,7 +123,7 @@ export function BeatMachine(props) {
   };
 
   const checkBeat = (e) => {
-    if (e.code != props.listenOn) return;
+    if (e.code !== props.listenOn) return;
 
     setBeats((beats) => {
       // determine hit result
@@ -118,7 +135,7 @@ export function BeatMachine(props) {
         const hit = calculateScore(b);
 
         // this key press caught a beat
-        if (hit != SCORE.NONE) {
+        if (hit !== SCORE.NONE) {
           score = hit;
           b.hit = true;
           setTimeout(() => removeBeat(b.id), 500);
@@ -126,7 +143,7 @@ export function BeatMachine(props) {
       }
 
       // display a score comment
-      if (score != SCORE.NONE) {
+      if (score !== SCORE.NONE) {
         setComments((prevComments) => {
           const comment = { id: uuid(), score: score };
           const newComments = prevComments.slice(-5);
@@ -136,7 +153,7 @@ export function BeatMachine(props) {
       }
 
       setCurrScore(score);
-      animateDrum(score == SCORE.NONE);
+      animateDrum(score === SCORE.NONE);
       return newBeats;
     });
   };
@@ -158,7 +175,7 @@ export function BeatMachine(props) {
     return SCORE.NONE;
   };
 
-  const addBeats = () => {
+  const singleBeat = () => {
     // randomly add a beat
     setBeats((oldBeats) => {
       const newBeats = [...oldBeats];
@@ -184,7 +201,7 @@ export function BeatMachine(props) {
         b.pos = b.hit
           ? b.pos
           : startPos + unitsPerMilliSec * (currTime - b.created);
-        if (calculateScore(b) == SCORE.PERFECT) {
+        if (calculateScore(b) === SCORE.PERFECT) {
           console.log("LA~");
         }
       }
@@ -206,8 +223,6 @@ export function BeatMachine(props) {
         </h1>
       ))}
       <svg className="game-box" viewBox={`0 0 100 ${fullHeight}`}>
-        <rect rx={4} x={32} y={20} width={36} height={28}></rect>
-        <circle r={7} cy={34} cx={50} stroke="white" strokeWidth={5}></circle>
         <circle
           className={drumState}
           key={"drum" + props.listenOn}

@@ -15,7 +15,7 @@
     height: 100%;
     padding: 1rem;
     box-sizing: border-box;
-    animation: twinkle 5s linear infinite;
+    animation: twinkle 3s linear infinite;
   }
 
   #disco-cd {
@@ -41,22 +41,19 @@
 
   @keyframes twinkle {
     0% {
-      background-color: #ff5956;
+      background-color: #5b5b5b;
     }
-    20% {
-      background-color: #ff7eff;
+    // 25% {
+    //   background-color: #c37eff;
+    // }
+    50% {
+      background-color: #989898;
     }
-    40% {
-      background-color: #8f0083;
-    }
-    60% {
-      background-color: #65d1ff;
-    }
-    80% {
-      background-color: #8ce2b7;
-    }
+    // 75% {
+    //   background-color: #f357c2;
+    // }
     100% {
-      background-color: #ff5956;
+      background-color: #5b5b5b;
     }
   }
 }

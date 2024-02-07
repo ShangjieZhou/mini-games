@@ -7,8 +7,9 @@ import retroMusic from "../../assets/audio/retro-disco-old-school.mp3";
 import discoCD from "../../assets/image/disco-cd.svg";
 import Lottie from "react-lottie";
 import flyingNotes from "../../assets/animations/floating-notes";
-import speaker from "../../assets/animations/dancing-speaker";
+import spaceman from "../../assets/animations/space-music-man";
 import { guess } from "web-audio-beat-detector";
+
 
 const speedMap = {
   100: "INSANE",
@@ -18,9 +19,9 @@ const speedMap = {
 };
 
 const machineList = [
-  { color: "#f7a76d", keyToListen: "ArrowLeft" },
-  { color: "#fa70c3", keyToListen: "ArrowDown" },
-  { color: "#5f98ed", keyToListen: "ArrowRight" },
+  { id: "left", color: "#5f98ed", keyToListen: "ArrowLeft" },
+  { id: "middle", color: "#fa70c3", keyToListen: "ArrowDown" },
+  { id: "right", color: "#f7a76d", keyToListen: "ArrowRight" },
 ];
 
 export function DiscoBattle(props) {
@@ -52,7 +53,7 @@ export function DiscoBattle(props) {
       audio.current.playbackRate = 1;
       setTimeout(() => {
         audio.current.play();
-      }, 1000 - 198 - 10);
+      }, 1000 - 198 - 50);
     }
   }, [open]);
 
@@ -116,17 +117,17 @@ export function DiscoBattle(props) {
             />
           </div>
           <div className="option-box">
-            {machineSet.length == 1 && (
+            {machineSet.length === 1 && (
               <h1 className="option-title">
                 USE <span style={{ fontWeight: 800 }}>SPACE</span> KEY
               </h1>
             )}
-            {machineSet.length == 2 && (
+            {machineSet.length === 2 && (
               <h1 className="option-title">
                 USE <b>&larr;</b> AND <b>&#8594;</b>
               </h1>
             )}
-            {machineSet.length == 3 && (
+            {machineSet.length === 3 && (
               <h1 className="option-title">
                 USE <span style={{ fontWeight: 800 }}>&#8592;</span>,
                 <span style={{ fontWeight: 800 }}> &#8595;</span> AND
@@ -159,18 +160,18 @@ export function DiscoBattle(props) {
       {!open && (
         <div id="disco-battle-box">
           <div>
-            <div style={{ width: "16rem" }}>
-              <Lottie options={options(speaker)} />
+            <div style={{ width: "24rem" }}>
+              <Lottie options={options(spaceman)} />
             </div>
           </div>
           <div
             className="machine-box"
             style={{ maxWidth: machineSet.length * 200 }}
           >
-            {machineSet.map((val, i) => (
+            {machineSet.map((val) => (
               <BeatMachine
-                key={i}
-                speed={115}
+                key={val.id}
+                speed={114.99}
                 listenOn={val.keyToListen}
                 onPerfect={addPerfect}
                 onGood={addGood}
